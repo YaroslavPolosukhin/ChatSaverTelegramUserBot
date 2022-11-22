@@ -107,7 +107,15 @@ def get(client, message):
                     message_text = "Must be longer than two arguments"
             elif args[0] in config.GET_ARGS["database"]["usage"]:
                 with open("database.json", "r") as read_file:
-                    app.send_message("me", str(json.load(read_file)))
+                    database = json.load(read_file)
+                    message_text += "------------------------------\n"
+                    message_text += "Recorded chats:\n"
+                    if database["recorded"] == {}:
+                        message_text += "No recorded chats\n"
+                    else:
+                        for recorded_chat in database["recorded"].keys():
+                            message_text += f"Chat: {recorded_chat}. Mirror: {database['recorded'][recorded_chat]}.\n"
+                    message_text += "------------------------------"
             elif args[0] in config.GET_ARGS["pow"]["usage"]:
                 if len(args) > 1:
                     s = 2
@@ -141,8 +149,8 @@ def get(client, message):
         else:
             message_text = "Must be longer than two arguments"
 
-    app.send_message("me", message_text)
-    message.edit(message_text)
+    app.send_message("me", message_text, parse_mode=app.parse_mode.HTML)
+    message.edit(message_text, parse_mode=app.parse_mode.HTML)
     sleep(1)
     message.delete()
 
