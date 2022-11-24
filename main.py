@@ -1,8 +1,11 @@
-import config
-from pyrogram import Client, filters
-from time import sleep
 import json
 import math
+from time import sleep
+
+from pyrogram import Client, filters
+import pyrogram
+
+import config
 
 app = Client("my_account", config.API_ID, config.API_HASH)
 
@@ -99,8 +102,31 @@ def get(client, message):
 
             if args[0] in config.GET_ARGS["info"]["usage"]:
                 if len(args) > 1:
-                    if args[1] in config.GET_ARGS["chat"]["usage"]:
-                        message_text = str(message.chat)
+                    if args[1] in config.GET_ARGS["chat"]["usage"]:  
+                        id = message.chat.id
+                        if len(args) > 2:
+                            id = int(args[2])
+                        
+                        chat = app.get_chat(id)
+                        message_text = "------------------------------\n"
+                        message_text += f"id - {id}\n"
+                        if str(chat.type) == "ChatType.PRIVATE":
+                            message_text += "Type - private\n"
+                            message_text += f"Username - {chat.username}\n"
+                            if chat.first_name != None:
+                                message_text += f"First name - {chat.first_name}\n"
+                            if chat.last_name != None:
+                                message_text += f"Last name - {chat.last_name}\n"
+                        if str(chat.type) == "ChatType.GROUP":
+                            message_text += f"Title - {chat.title}\n"
+                            message_text += f"Members count - {chat.members_count}\n"
+                            message_text += f"Can you send a messages - {chat.permissions.can_send_messages}\n"
+                            message_text += f"Are you a creator of chat - {chat.is_creator}\n"
+                            message_text += f"Can you edit info - {chat.permissions.can_change_info}\n"
+                        
+                        message_text += "------------------------------"
+                        
+                        #message_text = str(message.chat)
                     else:
                         message_text = "Invalid argument"
                 else:
@@ -114,7 +140,12 @@ def get(client, message):
                         message_text += "No recorded chats\n"
                     else:
                         for recorded_chat in database["recorded"].keys():
-                            message_text += f"Chat: {recorded_chat}. Mirror: {database['recorded'][recorded_chat]}.\n"
+                            id1 = int(recorded_chat)
+                            id2 = int(database['recorded'][recorded_chat])
+
+                            print(app.get_chat(id1).title)
+                            
+                            message_text += f"Chat: <a href='tg://user?id={str(id1)}'>{id1}</a>. Mirror: <a href='tg://user?id={str(id2)}'>{id2}</a>.\n"
                     message_text += "------------------------------"
             elif args[0] in config.GET_ARGS["pow"]["usage"]:
                 if len(args) > 1:
