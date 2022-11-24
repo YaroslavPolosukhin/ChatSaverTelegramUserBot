@@ -109,7 +109,7 @@ def get(client, message):
                         
                         chat = app.get_chat(id)
                         message_text = "------------------------------\n"
-                        message_text += f"id - {id}\n"
+                        message_text += f"id - <a href='tg://user?id={id}>{id}</a>\n"
                         if str(chat.type) == "ChatType.PRIVATE":
                             message_text += "Type - private\n"
                             message_text += f"Username - {chat.username}\n"
