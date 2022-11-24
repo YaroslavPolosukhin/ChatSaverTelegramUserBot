@@ -142,8 +142,6 @@ def get(client, message):
                         for recorded_chat in database["recorded"].keys():
                             id1 = int(recorded_chat)
                             id2 = int(database['recorded'][recorded_chat])
-
-                            print(app.get_chat(id1).title)
                             
                             message_text += f"Chat: <a href='tg://user?id={str(id1)}'>{id1}</a>. Mirror: <a href='tg://user?id={str(id2)}'>{id2}</a>.\n"
                     message_text += "------------------------------"
