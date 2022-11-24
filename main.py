@@ -3,7 +3,6 @@ import math
 from time import sleep
 
 from pyrogram import Client, filters
-import pyrogram
 
 import config
 
@@ -125,8 +124,6 @@ def get(client, message):
                             message_text += f"Can you edit info - {chat.permissions.can_change_info}\n"
                         
                         message_text += "------------------------------"
-                        
-                        #message_text = str(message.chat)
                     else:
                         message_text = "Invalid argument"
                 else:
