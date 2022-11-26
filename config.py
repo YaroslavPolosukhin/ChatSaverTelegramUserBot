@@ -1,8 +1,6 @@
-# [logining]
-
-# API_ID and API_HASH get from https://my.telegram.org/auth and there is a "API development tools"
-API_ID = 12345678 # Your api id
-API_HASH = "YOUR API HASH" # Your api hash
+# [debbuger]
+PRINT_RETRANSLATED_MESSAGES = True
+ANSEW_CHAT = "me" # Chat for information from get command ("me" or chat_id)
 
 # [command settings]
 START_ARGS = {
@@ -72,6 +70,3 @@ ALL_COMMANDS = {
         }
     }
 }
-
-# [debbuger]
-PRINT_RETRANSLATED_MESSAGES = True

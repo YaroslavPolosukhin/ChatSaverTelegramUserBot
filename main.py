@@ -4,9 +4,9 @@ from time import sleep
 
 from pyrogram import Client, filters
 
-import config
+import config, pyrogram_config
 
-app = Client("my_account", config.API_ID, config.API_HASH)
+app = Client("my_account", pyrogram_config.API_ID, pyrogram_config.API_HASH)
 
 data = {}
 with open("database.json", "r") as read_file:
@@ -107,8 +107,8 @@ def get(client, message):
                             id = int(args[2])
                         
                         chat = app.get_chat(id)
-                        message_text = "------------------------------\n"
-                        message_text += f"id - <a href='tg://user?id={id}>{id}</a>\n"
+                        message_text = "-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-\n"
+                        message_text += f"Id - [{id}](tg://user?id={str(id)})\n"
                         if str(chat.type) == "ChatType.PRIVATE":
                             message_text += "Type - private\n"
                             message_text += f"Username - {chat.username}\n"
@@ -123,7 +123,8 @@ def get(client, message):
                             message_text += f"Are you a creator of chat - {chat.is_creator}\n"
                             message_text += f"Can you edit info - {chat.permissions.can_change_info}\n"
                         
-                        message_text += "------------------------------"
+                        message_text += "-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-"
+                        app.send_message("me", f"[id](tg://user?id={str(id)})",parse_mode=app.parse_mode.MARKDOWN)
                     else:
                         message_text = "Invalid argument"
                 else:
@@ -131,7 +132,7 @@ def get(client, message):
             elif args[0] in config.GET_ARGS["database"]["usage"]:
                 with open("database.json", "r") as read_file:
                     database = json.load(read_file)
-                    message_text += "------------------------------\n"
+                    message_text += "-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-\n"
                     message_text += "Recorded chats:\n"
                     if database["recorded"] == {}:
                         message_text += "No recorded chats\n"
@@ -140,8 +141,8 @@ def get(client, message):
                             id1 = int(recorded_chat)
                             id2 = int(database['recorded'][recorded_chat])
                             
-                            message_text += f"Chat: <a href='tg://user?id={str(id1)}'>{id1}</a>. Mirror: <a href='tg://user?id={str(id2)}'>{id2}</a>.\n"
-                    message_text += "------------------------------"
+                            message_text += f"Chat: [{id1}](tg://user?id={str(id1)}). Mirror: [{id2}](tg://user?id={str(id2)}).\n"
+                    message_text += "-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-"
             elif args[0] in config.GET_ARGS["pow"]["usage"]:
                 if len(args) > 1:
                     s = 2
@@ -175,7 +176,7 @@ def get(client, message):
         else:
             message_text = "Must be longer than two arguments"
 
-    app.send_message("me", message_text, parse_mode=app.parse_mode.HTML)
+    app.send_message("me", message_text, parse_mode=app.parse_mode.MARKDOWN)
     message.edit(message_text, parse_mode=app.parse_mode.HTML)
     sleep(1)
     message.delete()
@@ -198,7 +199,7 @@ def help(client, message):
             help_message += f"Description: <i>{config.ALL_COMMANDS[args[0]]['description']}</i>\n"
 
             if config.ALL_COMMANDS[args[0]]["args"] != {}:
-                help_message += f"<b>Arguments:</b>\n"
+                help_message += "<b>Arguments:</b>\n"
                 command_arguments = config.ALL_COMMANDS[args[0]]["args"]
                 for argument_name in command_arguments.keys():
                     help_message += f"{argument_name} - <i>{command_arguments[argument_name]}</i>\n"
