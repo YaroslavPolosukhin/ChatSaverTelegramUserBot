@@ -1,6 +1,7 @@
 import json
 import math
 from time import sleep
+import datetime
 
 from pyrogram import Client, filters
 
@@ -14,8 +15,9 @@ with open("database.json", "r") as read_file:
 
 
 async def get_massage_from_date(date, chat_id):
-    async for message in app.get_chat_history(chat_id):
-        if message.date == date:
+    pdate = datetime.datetime(date.year, date.month, date.day, date.hour, date.minute+1, date.second)
+    async for message in app.get_chat_history(chat_id, offset_date=pdate):
+        if message.date.hour == date.hour and message.date.minute == date.minute and message.date.year == date.year and message.date.month == date.month and message.date.day == date.day:
             return message
 
 
@@ -124,7 +126,6 @@ def get(client, message):
                             message_text += f"Can you edit info - {chat.permissions.can_change_info}\n"
                         
                         message_text += "-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-"
-                        app.send_message("me", f"[id](tg://user?id={str(id)})",parse_mode=app.parse_mode.MARKDOWN)
                     else:
                         message_text = "Invalid argument"
                 else:
@@ -176,8 +177,8 @@ def get(client, message):
         else:
             message_text = "Must be longer than two arguments"
 
-    app.send_message("me", message_text, parse_mode=app.parse_mode.MARKDOWN)
-    message.edit(message_text, parse_mode=app.parse_mode.HTML)
+    app.send_message(config.ANSEW_CHAT, message_text, parse_mode=app.parse_mode.MARKDOWN)
+    message.edit(message_text, parse_mode=app.parse_mode.MARKDOWN)
     sleep(1)
     message.delete()
 
@@ -210,6 +211,7 @@ def help(client, message):
 
     # message.edit(help_message, parse_mode=app.parse_mode.HTML)
     app.send_message("me", help_message, parse_mode=app.parse_mode.HTML)
+    print(message.date.hour, message.date.minute, message.date.second, " - ", message.text)
     # sleep(1)
     message.delete()
 

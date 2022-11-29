@@ -1,6 +1,6 @@
 # [debbuger]
 PRINT_RETRANSLATED_MESSAGES = True
-ANSEW_CHAT = "me" # Chat for information from get command ("me" or chat_id)
+ANSEW_CHAT = "me" # Chat for information from get command ("me" or chat_id or "this_chat")
 
 # [command settings]
 START_ARGS = {
